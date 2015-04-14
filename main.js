@@ -25,12 +25,17 @@ var UserList = (function () {
 
     // 主要的資料
     var _users = [];
+    var _post = [];
+    var _undo = [];
 
     return {
         // 把資料存到 local storage
         save: function() {
             // local storage 只能存字串
-            localStorage.setItem(USER_LIST, JSON.stringify(_users));
+            var data = JSON.stringify(_users);
+            if ( localStorage.getItem(USER_LIST) != data )
+                localStorage.setItem(USER_LIST, data);
+
             alert('存擋成功');
         },
         // 從 local storage 載入資料
@@ -50,20 +55,32 @@ var UserList = (function () {
             }
         },
         add: function (user) {
+            _post.push(_users.slice(0));
+            _undo = [];
             _users.push(user);
             renderUserList(_users);
         },
         remove: function (i) {
-            _users.splice(i, 1);
+            _post.push(_users.slice(0));
+            _undo = [];
+            var data = _users.splice(i, 1);
             renderUserList(_users);
         },
         redo: function() {
-            // 尚未完成
-            alert('redo 功能尚未完成!');
+            var data = _undo.pop();
+            if ( data ) {
+                _post.push(_users);
+                _users = data;
+                renderUserList(_users);
+            }
         },
         undo: function() {
-            // 尚未完成
-            alert('undo 功能尚未完成!')
+            var data = _post.pop();
+            if ( data ) {
+                _undo.push(_users);
+                _users = data;
+                renderUserList(_users);
+            }
         }
     };
 
