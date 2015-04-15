@@ -31,7 +31,7 @@ var UserList = (function () {
 	function clone( obj ) {
 		if ( obj ) {
 			if ( /^(Object|Array)$/.test( obj.constructor.name ) ) {
-				var tmp = {};
+				var tmp = obj.constructor();
 				for ( var key in obj ) 
 					tmp[key] = clone(obj[key]);
 				
