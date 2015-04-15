@@ -37,7 +37,7 @@ var UserList = (function () {
 				
 				return tmp;
 			} else
-				return obj.constructor( obj.valueOf() );
+				return new obj.constructor( obj.valueOf() );
 		} else
 			return obj
 	}
