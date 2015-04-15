@@ -70,7 +70,7 @@ var UserList = (function () {
 			   rec.birthday = new Date(rec.birthday);
 			});
             if ( !compare( store, _users ) )
-				localStorage.setItem(USER_LIST, _users);
+				localStorage.setItem(USER_LIST, JSON.stringify(_users));
 
             alert('存擋成功');
         },
