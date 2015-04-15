@@ -66,7 +66,10 @@ var UserList = (function () {
             // local storage 只能存字串
 			var store = localStorage.getItem(USER_LIST);
 			store = ( store ) ? JSON.parse(store) : [] ;
-            if ( compare( store, _users ) )
+			store.forEach(function(rec){
+			   rec.birthday = new Date(rec.birthday);
+			});
+            if ( !compare( store, _users ) )
 				localStorage.setItem(USER_LIST, data);
 
             alert('存擋成功');
