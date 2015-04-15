@@ -48,7 +48,7 @@ var UserList = (function () {
 				if ( Object.getOwnPropertyNames(obj1).length 
 					== Object.getOwnPropertyNames(obj2).length ) {
 					for ( var key in obj1 )
-						if ( !ObjCompare( obj1[key], obj2[key] ) )
+						if ( !compare( obj1[key], obj2[key] ) )
 							return false;
 					
 					return true;
