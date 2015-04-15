@@ -27,14 +27,47 @@ var UserList = (function () {
     var _users = [];
     var _post = [];
     var _undo = [];
-
+	
+	function clone( obj ) {
+		if ( obj ) {
+			if ( /^(Object|Array)$/.test( obj.constructor.name ) ) {
+				var tmp = {};
+				for ( var key in obj ) 
+					tmp[key] = clone(obj[key]);
+				
+				return tmp;
+			} else
+				return obj.constructor( obj.valueOf() );
+		} else
+			return obj
+	}
+	
+	function compare( obj1, obj2 ) {
+		if ( obj1.constructor.name == obj2.constructor.name ) {
+			if ( /^(Object|Array)$/.test( obj1.constructor.name ) ) {
+				if ( Object.getOwnPropertyNames(obj1).length 
+					== Object.getOwnPropertyNames(obj2).length ) {
+					for ( var key in obj1 )
+						if ( !ObjCompare( obj1[key], obj2[key] ) )
+							return false;
+					
+					return true;
+				}
+			} else
+				return obj1.valueOf() == obj2.valueOf();
+		}
+		
+		return false;
+	}
+	
     return {
         // 把資料存到 local storage
         save: function() {
             // local storage 只能存字串
-            var data = JSON.stringify(_users);
-            if ( localStorage.getItem(USER_LIST) != data )
-                localStorage.setItem(USER_LIST, data);
+			var store = localStorage.getItem(USER_LIST);
+			store = ( store ) ? JSON.parse(store) : [] ;
+            if ( compare( store, _users ) )
+				localStorage.setItem(USER_LIST, data);
 
             alert('存擋成功');
         },
@@ -55,13 +88,13 @@ var UserList = (function () {
             }
         },
         add: function (user) {
-            _post.push(_users.slice(0));
+            _post.push(clone(_users));
             _undo = [];
             _users.push(user);
             renderUserList(_users);
         },
         remove: function (i) {
-            _post.push(_users.slice(0));
+			_post.push(clone(_users));
             _undo = [];
             var data = _users.splice(i, 1);
             renderUserList(_users);
